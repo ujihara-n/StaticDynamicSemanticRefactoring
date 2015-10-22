@@ -1,67 +1,46 @@
 
 public class TargetClassMetrics {
 	public String classname;
-	private int static_called,static_created,static_accessed,static_returned,static_parameter,dynamic_called,dynamic_created,dynamic_accessed;
+	private int static_call,static_called,static_access,dynamic_called,dynamic_created,dynamic_accessed;
 
 	public TargetClassMetrics(String name){
 
 		classname = name;
+		static_call = 0;
 		static_called = 0;
-		static_created = 0;
-		static_accessed = 0;
-		static_returned = 0;
-		static_parameter = 0;
+		static_access = 0;
 		dynamic_called = 0;
 		dynamic_created = 0;
 		dynamic_accessed = 0;
 	}
-	
+
 	public void setValue(int num,int kind){
 		switch (kind){
 		case 0:
-			setStatic_called(num);
+			setStatic_call(num);
 			break;
 		case 1:
-			setStatic_created(num);
+			setStatic_called(num);
 			break;
 		case 2:
-			setStatic_accessed(num);
+			setStatic_access(num);
 			break;
 		case 3:
-			setStatic_returned(num);
-			break;
-		case 4:
-			setStatic_parameter(num);
-			break;
-		case 5:
 			setDynamic_called(num);
 			break;
-		case 6:
+		case 4:
 			setDynamic_created(num);
 			break;
-		case 7:
+		case 5:
 			setDynamic_accessed(num);
 			break;
 		}
 	}
 
 	public int getTotalValue(){
-		return static_called+static_created+static_accessed+static_returned+static_parameter+dynamic_called+dynamic_created+dynamic_accessed;
-	}
-	
-  	public int getStatic_created() {
-		return static_created;
-	}
-	public void setStatic_created(int static_created) {
-		this.static_created = this.static_created + static_created;
+		return static_called+static_call+static_access+dynamic_called+dynamic_created+dynamic_accessed;
 	}
 
-	public int getStatic_returned() {
-		return static_returned;
-	}
-	public void setStatic_returned(int static_returned) {
-		this.static_returned = this.static_returned + static_returned;
-	}
 
 	public int getDynamic_accessed() {
 		return dynamic_accessed;
@@ -77,18 +56,24 @@ public class TargetClassMetrics {
 		this.dynamic_created = this.dynamic_created + dynamic_created;
 	}
 
+	public int getStatic_call() {
+		return static_call;
+	}
+	public void setStatic_call(int static_call) {
+		this.static_call = this.static_call  + static_call;
+	}
+
 	public int getStatic_called() {
 		return static_called;
 	}
 	public void setStatic_called(int static_called) {
 		this.static_called = this.static_called  + static_called;
 	}
-
-	public int getStatic_accessed() {
-		return static_accessed;
+	public int getStatic_access() {
+		return static_access;
 	}
-	public void setStatic_accessed(int static_accessed) {
-		this.static_accessed = this.static_accessed  + static_accessed;
+	public void setStatic_access(int static_access) {
+		this.static_access = this.static_access  + static_access;
 	}
 
 	public int getDynamic_called() {
@@ -98,24 +83,17 @@ public class TargetClassMetrics {
 		this.dynamic_called = this.dynamic_called  + dynamic_called;
 	}
 
-	public int getStatic_parameter() {
-		return static_parameter;
-	}
-	public void setStatic_parameter(int static_parameter) {
-		this.static_parameter = this.static_parameter  + static_parameter;
+	public String returnLine(){
+		return classname+","+static_call+","+static_called+","+static_access+","+dynamic_called+","+dynamic_created+","+dynamic_accessed;
 	}
 
-	public String returnLine(){
-		return classname+","+static_called+","+static_created+","+static_accessed+","+static_returned+","+static_parameter+","+dynamic_called+","+dynamic_created+","+dynamic_accessed;
-	}
-	
 	public String returnScore(){
-		double score =((double)static_called+(double)static_created+(double)static_accessed+(double)static_returned+(double)static_parameter)/5+((double)dynamic_called+(double)dynamic_created+(double)dynamic_accessed)/3;
-		return classname+":"+score;	
+		double score = getScore();
+		return classname+":"+ score;
 	}
-	
+
 	public Double getScore(){
-		double score =((double)static_called+(double)static_created+(double)static_accessed+(double)static_returned+(double)static_parameter)/5+((double)dynamic_called+(double)dynamic_created+(double)dynamic_accessed)/3;
-		return score;	
+		double score =((double)static_call+(double)static_called+(double)static_access*2)/4+((double)dynamic_called+(double)dynamic_created+(double)dynamic_accessed)/3;
+		return score;
 	}
 }
